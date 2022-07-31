@@ -1,9 +1,10 @@
 <template>
   <div id="Modal">
     <h4>Modal</h4>
+    <h3 v-if="props.mountDone">Good</h3>
     <button @click="openModal">Open</button>
   </div>
-  <Teleport to="#Container">
+  <Teleport v-if="props.mountDone" :to="props.where">
     <Transition>
       <div v-if="visible" class="modal">
         <h1>Modal</h1>
@@ -14,8 +15,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 
+interface ModalProps {
+  mountDone: boolean;
+  where: string;
+}
+const props = defineProps<ModalProps>();
 const visible = ref<boolean>(false);
 const openModal = () => {
   visible.value = true;
@@ -30,16 +36,17 @@ const closeModal = () => {
   border: 4px solid yellowgreen
   padding: 10px
 .modal
-  position: static
+  position: absolute
+  background-color: gray
+  top: 0
   left: 40%
-  top: 20%
   display: flex
   flex-direction: column
   box-sizing: content-box
-  width: 400px
-  height: 400px
+  width: inherit / 2
+  height: inherit /2
   border-radius: 10px
-  border: 1px solid black
+  border: inherit
 button
   display: block
   box-sizing: content-box
